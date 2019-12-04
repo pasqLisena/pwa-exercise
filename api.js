@@ -1,3 +1,4 @@
+/* eslint-env browser  */
 /* global axios localStorage */
 const api = 'https://api.openweathermap.org/data/2.5';
 
@@ -19,10 +20,11 @@ const request = async (url, content = {}) => {
   console.log(obj.q);
 
   let response = JSON.parse(localStorage.getItem(obj.q));
-  if (response) {
+  if (response && !navigator.onLine) {
     console.log('--> CACHE');
   } else {
     response = await axios.get(`${api}/${url}?${queryString(obj)}`);
+    console.log('--> FETCH');
     console.log(response);
     localStorage.setItem(obj.q, JSON.stringify(response));
   }
