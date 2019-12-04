@@ -1,5 +1,6 @@
 /* eslint-env browser  */
-/* global axios localStorage */
+/* global axios */
+/* eslint-disable prefer-object-spread */
 const api = 'https://api.openweathermap.org/data/2.5';
 
 // The api key is ok to be exposed, it's free and only for self study.
@@ -16,16 +17,14 @@ const queryString = (obj) => Object.entries(obj)
   .join('&');
 
 const request = async (url, content = {}) => {
-  const obj = Object.assign({}, defaultContent, content); // eslint-disable-line prefer-object-spread
-  console.log(obj.q);
+  const obj = Object.assign({}, defaultContent, content);
 
   let response = JSON.parse(localStorage.getItem(obj.q));
   if (response && !navigator.onLine) {
-    console.log('--> CACHE');
+    console.log(obj.q, '--> CACHE');
   } else {
     response = await axios.get(`${api}/${url}?${queryString(obj)}`);
-    console.log('--> FETCH');
-    console.log(response);
+    console.log(obj.q, '--> FETCH');
     localStorage.setItem(obj.q, JSON.stringify(response));
   }
   return response.data;
