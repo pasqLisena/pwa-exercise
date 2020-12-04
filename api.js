@@ -19,13 +19,14 @@ const queryString = (obj) => Object.entries(obj)
 const request = async (url, content = {}) => {
   const obj = Object.assign({}, defaultContent, content);
 
-  let response = JSON.parse(localStorage.getItem(obj.q));
+  //  let response = JSON.parse(localStorage.getItem(obj.q));
+  let response = null;
   if (response && !navigator.onLine) {
     console.log(obj.q, '--> CACHE');
+    // localStorage.setItem(obj.q, JSON.stringify(response));
   } else {
     response = await axios.get(`${api}/${url}?${queryString(obj)}`);
     console.log(obj.q, '--> FETCH');
-    localStorage.setItem(obj.q, JSON.stringify(response));
   }
   return response.data;
 };
